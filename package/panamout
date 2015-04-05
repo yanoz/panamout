@@ -1,0 +1,11 @@
+#!/bin/sh
+
+java $JAVA_OPTS -jar /var/panamout/panamout-${project.version}/panamout.jar $@ 1>/var/panamout/boot.log 2>/var/panamout/boot_error.log &
+
+# Capture the child process PID
+CHILD="$!"
+
+# Kill the child process when start-stop-daemon sends us a kill signal
+trap "kill $CHILD" exit INT TERM
+
+wait

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+PANAMOUT_LINK=/var/panamout/panamout
+INITD_LINK=/etc/init.d/panamout
+
+echo "postrm..."
+rm -f ${PANAMOUT_LINK}
+rm -f ${INITD_LINK}
+
+exit 0

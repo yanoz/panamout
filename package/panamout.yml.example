@@ -1,0 +1,3 @@
+http:
+  port: 8010
+  adminPort: 8011

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+PANAMOUT_LINK=/var/panamout/panamout
+INITD_LINK=/etc/init.d/panamout
+
+chmod -R 755 /var/panamout/
+
+rm -f ${PANAMOUT_LINK}
+rm -f ${INITD_LINK}
+ln -s /var/panamout/panamout-${project.version}/panamout ${PANAMOUT_LINK}
+ln -s /var/panamout/panamout-${project.version}/panamout-init.d ${INITD_LINK}
+
+if ! getent passwd yann > /dev/null; then
+    sudo adduser --uid 501 --system --group --gecos "yann" --shell /bin/bash yann
+fi
+
+chown yann:yann -R /var/panamout
+
+exit 0
