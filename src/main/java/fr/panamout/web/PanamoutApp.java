@@ -28,7 +28,7 @@ public class PanamoutApp extends Service<PanamoutConfig> {
     private static final Logger LOGGER = LoggerFactory.getLogger(PanamoutApp.class);
 
     /**
-     * Start Flow application.
+     * Start Panamout application.
      */
     public static void main(String[] arguments) throws Exception {
 
