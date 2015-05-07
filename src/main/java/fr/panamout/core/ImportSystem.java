@@ -4,16 +4,15 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.SmallestMailboxPool;
-import akka.routing.SmallestMailboxRouter;
-import com.google.common.io.ByteStreams;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import fr.panamout.core.actors.Parser;
+import fr.panamout.core.actors.Extractor;
 import fr.panamout.core.actors.Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by yann on 4/6/15.
@@ -36,7 +35,7 @@ public class ImportSystem {
         system = ActorSystem.create("import-system", ConfigFactory.load(customConf));
 
         reader = system.actorOf(Props.create(Reader.class), "reader");
-        system.actorOf(new SmallestMailboxPool(10).props(Props.create(Parser.class)), "parser");
+        system.actorOf(new SmallestMailboxPool(10).props(Props.create(Extractor.class)), "extractor");
     }
     public static ImportSystem getInstance() {
         if (singleton == null) {
