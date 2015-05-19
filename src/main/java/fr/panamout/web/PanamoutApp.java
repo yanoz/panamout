@@ -12,6 +12,7 @@ import com.yammer.dropwizard.config.Environment;
 import fr.panamout.web.config.PanamoutConfig;
 import fr.panamout.web.injection.PanamoutModule;
 import fr.panamout.web.resources.ImportResource;
+import fr.panamout.web.resources.SpotResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +84,7 @@ public class PanamoutApp extends Service<PanamoutConfig> {
 
         try {
             environment.addResource(injector.getInstance(ImportResource.class));
+            environment.addResource(injector.getInstance(SpotResource.class));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
