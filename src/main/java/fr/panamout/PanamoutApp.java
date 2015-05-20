@@ -1,10 +1,11 @@
-package fr.panamout.web;
+package fr.panamout;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.googlecode.flyway.core.Flyway;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -81,7 +82,9 @@ public class PanamoutApp extends Service<PanamoutConfig> {
     public void run(PanamoutConfig config, Environment environment) {
         configureLogback();
         Injector injector = Guice.createInjector(new PanamoutModule(config));
-
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(config.database.url, config.database.username, config.database.password);
+        flyway.migrate();
         try {
             environment.addResource(injector.getInstance(ImportResource.class));
             environment.addResource(injector.getInstance(SpotResource.class));
