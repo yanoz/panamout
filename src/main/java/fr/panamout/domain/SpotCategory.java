@@ -3,8 +3,9 @@ package fr.panamout.domain;
 /**
  * Created by yann on 5/7/15.
  */
-public enum SpotType {
+public enum SpotCategory {
 
-    RESTAURANT, //
-    BAR;
+    Restaurant, //
+    Bar, //
+    Both;
 }

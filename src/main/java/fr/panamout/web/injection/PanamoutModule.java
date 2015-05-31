@@ -2,6 +2,7 @@ package fr.panamout.web.injection;
 
 import com.google.inject.AbstractModule;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import fr.panamout.core.actors.Persister;
 import fr.panamout.web.config.PanamoutConfig;
 
 import javax.sql.DataSource;
@@ -29,6 +30,7 @@ public class PanamoutModule extends AbstractModule{
         } catch (PropertyVetoException e) {
             //LOGGER.error(e.getMessage(), e);
         }
+
         cpds.setJdbcUrl(config.database.url);
         cpds.setUser(config.database.username);
         cpds.setPassword(config.database.password);
@@ -36,5 +38,7 @@ public class PanamoutModule extends AbstractModule{
         cpds.setAcquireIncrement(5);
         cpds.setMaxPoolSize(20);
         bind(DataSource.class).toInstance(cpds);
+
+        requestStaticInjection(Persister.class);
     }
 }

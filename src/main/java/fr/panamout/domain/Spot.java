@@ -1,6 +1,5 @@
 package fr.panamout.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
@@ -9,32 +8,39 @@ import java.util.Map;
  * Created by yann on 5/7/15.
  */
 public class Spot {
-
     @Override
     public String toString() {
         return "Spot{" +
                 "name='" + name + '\'' +
-                ", type=" + type +
-                ", address=" + address +
-                ", coordinates=" + coordinates +
-                ", metas=" + metas +
+                ", category=" + category +
+                ", street='" + street + '\'' +
+                ", details='" + details + '\'' +
+                ", district='" + district + '\'' +
+                ", metas='" + metas + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
                 '}';
     }
 
     @JsonProperty("name")
-    String name;
-    @JsonProperty("type")
-    SpotType type;
-    @JsonProperty("address")
-    SpotAddress address;
+    public String name;
+    @JsonProperty("category")
+    public SpotCategory category;
+    @JsonProperty("street")
+    public String street;
+    @JsonProperty("details")
+    public String details;
+    @JsonProperty("district")
+    public Integer district;
     @JsonProperty("metas")
-    Map<String, String> metas;
-    @JsonIgnore
-    SpotCoordinate coordinates;
+    public Map<String, String> metas;
+    @JsonProperty("lat")
+    public Double lat;
+    @JsonProperty("lng")
+    public Double lng;
+
 
     public String getAddress() {
-        return address.toString();
+        return String.format("%s, %s Paris", name, street);
     }
-
-
 }

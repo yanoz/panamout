@@ -12,12 +12,13 @@ public class SpotBuilder {
     public static Spot build(Spot spot, GeoCodeResponse response) throws IOException {
         Spot completedSpot = new Spot();
         completedSpot.name = spot.name;
-        completedSpot.type = spot.type;
-        completedSpot.address = spot.address;
+        completedSpot.category = spot.category;
+        completedSpot.street = spot.street;
         completedSpot.metas = spot.metas;
-        completedSpot.coordinates = new SpotCoordinate();
-        completedSpot.coordinates.lat = response.results[0].geometry.location.lat;
-        completedSpot.coordinates.lng = response.results[0].geometry.location.lng;
+        completedSpot.district = spot.district;
+        completedSpot.details = spot.details;
+        completedSpot.lat = Double.valueOf(response.results[0].geometry.location.lat);
+        completedSpot.lng = Double.valueOf(response.results[0].geometry.location.lng);
         return completedSpot;
     }
 }

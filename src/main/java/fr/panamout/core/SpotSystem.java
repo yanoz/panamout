@@ -43,7 +43,7 @@ public class SpotSystem {
     }
 
     public void create(Spot spot) {
-        system.actorSelection("/user/persister").tell(spot, null);
+        system.actorSelection("/user/spoter").tell(spot, null);
     }
 
 }
