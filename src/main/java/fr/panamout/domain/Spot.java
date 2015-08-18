@@ -19,6 +19,7 @@ public class Spot {
                 ", metas='" + metas + '\'' +
                 ", lat=" + lat +
                 ", lng=" + lng +
+                ", url=" + url +
                 '}';
     }
 
@@ -38,6 +39,8 @@ public class Spot {
     public Double lat;
     @JsonProperty("lng")
     public Double lng;
+    @JsonProperty("url")
+    public String url;
 
 
     public String getAddress() {
