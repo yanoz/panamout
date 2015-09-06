@@ -1,5 +1,6 @@
 package fr.panamout.core.actors;
 
+import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import fr.panamout.domain.SpotBuilder;
 import fr.panamout.domain.SpotCategory;
@@ -21,6 +22,10 @@ import java.util.regex.Pattern;
 public class Extractor extends UntypedActor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Extractor.class);
 
+    private ActorSelection getSpoter() {
+        return getContext().actorSelection("/user/spoter");
+    }
+
     @Override
     public void onReceive(Object message) throws Exception {
         Element link = (Element) message;
@@ -33,8 +38,7 @@ public class Extractor extends UntypedActor {
                 extractParisBouge(url);
                 break;
             default:
-                throw new IllegalArgumentException(String.format("No extractor defined for url %s", url));
-
+                LOGGER.info(url.toString());
         }
     }
 
@@ -43,13 +47,9 @@ public class Extractor extends UntypedActor {
         Elements title = doc.getElementsByTag("title");
         Elements address = doc.getElementsByTag("li");
         Pattern pAddr = Pattern.compile("(.*), ([0-9]{5}), Paris, France");
-        Pattern pName = Pattern.compile("(.*):.*");
+
 
         SpotBuilder builder = new SpotBuilder();
-        Matcher mName = pName.matcher(title.text());
-        if (mName.find()) {
-            builder.named(mName.group(1));
-        }
 
         for (Element element : address) {
             if (element.attr("class").equals("place-address onelined")) {
@@ -57,12 +57,15 @@ public class Extractor extends UntypedActor {
                 if (mAddress.find()) {
                     builder.located(mAddress.group(1));
                     builder.district(Integer.valueOf(mAddress.group(2)));
-                    break;
+                    continue;
                 }
+            }
+            if (element.attr("class").equals("title text-title onelined")) {
+                builder.named(element.text());
             }
         }
         builder.url(url.toString());
-        LOGGER.info(builder.build().toString());
+        getSpoter().tell(builder.build(), getSelf());
     }
 
     private void extractTelerama(URL url) throws IOException {
@@ -77,24 +80,29 @@ public class Extractor extends UntypedActor {
                 if (mStreet.find()) {
                     builder.located(mStreet.group(1));
                     builder.district(Integer.valueOf(mStreet.group(2)));
+                    continue;
                 }
             }
             if (element.attr("property")!= null && element.attr("property").equals("og:title")) {
                 builder.named(element.attr("content"));
+                continue;
             }
             if (element.attr("property")!= null && element.attr("property").equals("place:location:latitude")) {
                 builder.lat(Double.valueOf(element.attr("content")));
+                continue;
             }
             if (element.attr("property")!= null && element.attr("property").equals("place:location:longitude")) {
                 builder.lng(Double.valueOf(element.attr("content")));
+                continue;
             }
             if (element.attr("property")!= null && element.attr("property").equals("telerama:genre")) {
                 if ("Bars".equals(element.attr("content"))) {
                     builder.category(SpotCategory.Bar);
+                    continue;
                 }
             }
            builder.url(url.toString());
         }
-        LOGGER.info(builder.build().toString());
+        getSpoter().tell(builder.build(), getSelf());
     }
 }

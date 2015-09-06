@@ -33,12 +33,16 @@ public class Spoter extends AbstractActor {
     }
 
     private Spot getCoordinate(Spot spot) throws IOException {
+        if (spot.lat != null && spot.lng != null) {
+            return spot;
+        }
         Client client = Client.create();
         WebResource webResource = client
                 .resource(String.format("%s?address=%s&key=%s", GEOCODER_REQUEST_PREFIX, URLEncoder.encode(spot.getAddress(), "UTF-8"), API_KEY));
         ClientResponse response = webResource.accept("application/json")
                 .get(ClientResponse.class);
-        GeoCodeResponse googleResponse = new ObjectMapper().readValue(response.getEntity(String.class), GeoCodeResponse.class);
+        String sResponse = response.getEntity(String.class);
+        GeoCodeResponse googleResponse = new ObjectMapper().readValue(sResponse, GeoCodeResponse.class);
         if (!googleResponse.status.equals("OK")) {
             throw new IOException(String.format("Error while calling Geocode API : %s", googleResponse.status));
         }

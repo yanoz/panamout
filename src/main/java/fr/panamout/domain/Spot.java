@@ -44,6 +44,6 @@ public class Spot {
 
 
     public String getAddress() {
-        return String.format("%s, %s Paris", name, street);
+        return String.format("%s, %s Paris, France", name, street);
     }
 }

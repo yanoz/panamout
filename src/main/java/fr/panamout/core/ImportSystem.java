@@ -7,7 +7,9 @@ import akka.routing.SmallestMailboxPool;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import fr.panamout.core.actors.Extractor;
+import fr.panamout.core.actors.Persister;
 import fr.panamout.core.actors.Reader;
+import fr.panamout.core.actors.Spoter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,8 @@ public class ImportSystem {
 
         reader = system.actorOf(Props.create(Reader.class), "reader");
         system.actorOf(new SmallestMailboxPool(10).props(Props.create(Extractor.class)), "extractor");
+        system.actorOf(new SmallestMailboxPool(10).props(Props.create(Spoter.class)), "spoter");
+        system.actorOf(new SmallestMailboxPool(10).props(Props.create(Persister.class)), "persister");
     }
     public static ImportSystem getInstance() {
         if (singleton == null) {

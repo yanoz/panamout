@@ -40,7 +40,11 @@ public class Persister extends AbstractActor {
     private long saveSpot(Spot s, Connection connection) throws SQLException {
         try ( PreparedStatement psSpot = connection.prepareStatement(INSERT_SPOT, Statement.RETURN_GENERATED_KEYS);) {
             psSpot.setString(1, s.name);
-            psSpot.setString(2, s.category.toString());
+            if (s.category != null) {
+                psSpot.setString(2, s.category.toString());
+            } else {
+                psSpot.setString(2, null);
+            }
             psSpot.setString(3, s.street);
             psSpot.setString(4, s.details);
             psSpot.setInt(5, s.district);

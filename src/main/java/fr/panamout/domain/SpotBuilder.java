@@ -2,6 +2,8 @@ package fr.panamout.domain;
 
 import com.google.common.base.Strings;
 import fr.panamout.domain.geocode.GeoCodeResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,7 +13,7 @@ import java.util.Map;
  * Created by yann on 5/7/15.
  */
 public class SpotBuilder {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpotBuilder.class);
     String name;
     SpotCategory category;
     String street;
@@ -92,24 +94,24 @@ public class SpotBuilder {
     public Spot build() {
         Spot completedSpot = new Spot();
         if (Strings.isNullOrEmpty(name)) {
-            throw new IllegalArgumentException("Name can not be null for spot creation");
+            throw new IllegalArgumentException(String.format("Name can not be null for spot creation : %s", url));
         }
         completedSpot.name = name;
         completedSpot.category = category;
         if (Strings.isNullOrEmpty(street)) {
-            throw new IllegalArgumentException("Street can not be null for spot creation");
+            throw new IllegalArgumentException(String.format("Street can not be null for spot creation : %s", url));
         }
         completedSpot.street = street;
         completedSpot.metas = metas;
         if (null == district) {
-            throw new IllegalArgumentException("District can not be null for spot creation");
+            throw new IllegalArgumentException(String.format("District can not be null for spot creation : %s", url));
         }
         completedSpot.district = district;
         completedSpot.details = details;
         completedSpot.lat = lat;
         completedSpot.lng = lng;
-        if (Strings.isNullOrEmpty(street)) {
-            throw new IllegalArgumentException("Url can not be null for spot creation");
+        if (Strings.isNullOrEmpty(url)) {
+            throw new IllegalArgumentException(String.format("Url can not be null for spot creation : %s", name));
         }
         completedSpot.url = url;
         return completedSpot;
