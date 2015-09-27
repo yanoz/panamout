@@ -17,7 +17,7 @@ import java.sql.*;
  */
 public class Persister extends AbstractActor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Persister.class);
-    private static final String INSERT_SPOT = "INSERT INTO spot(name, category, street, details, district, lat, lng) VALUES (?, ?::category, ?, ?, ?, ?, ?);";
+    private static final String INSERT_SPOT = "INSERT INTO spot(name, category, street, details, district, lat, lng, url) VALUES (?, ?::category, ?, ?, ?, ?, ?, ?);";
     private static final String INSERT_METAS = "INSERT INTO metas(spot_id, metas) VALUES (?, ?::jsonb);";
 
     @Inject
@@ -50,6 +50,7 @@ public class Persister extends AbstractActor {
             psSpot.setInt(5, s.district);
             psSpot.setDouble(6, s.lat);
             psSpot.setDouble(7, s.lng);
+            psSpot.setString(8, s.url);
             psSpot.execute();
             try (ResultSet resultSet = psSpot.getGeneratedKeys()) {
                 resultSet.next();
