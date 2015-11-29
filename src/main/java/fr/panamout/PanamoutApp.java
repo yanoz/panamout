@@ -14,6 +14,7 @@ import fr.panamout.web.config.PanamoutConfig;
 import fr.panamout.web.injection.PanamoutModule;
 import fr.panamout.web.resources.ImportResource;
 import fr.panamout.web.resources.SpotResource;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,6 +89,10 @@ public class PanamoutApp extends Service<PanamoutConfig> {
         try {
             environment.addResource(injector.getInstance(ImportResource.class));
             environment.addResource(injector.getInstance(SpotResource.class));
+            environment.addFilter(CrossOriginFilter.class, "/*")
+                    .setInitParam("allowedOrigins", "*")
+                    .setInitParam("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin")
+                    .setInitParam("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

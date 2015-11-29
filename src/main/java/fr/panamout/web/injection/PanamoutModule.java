@@ -3,6 +3,7 @@ package fr.panamout.web.injection;
 import com.google.inject.AbstractModule;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import fr.panamout.core.actors.Persister;
+import fr.panamout.core.service.SpotService;
 import fr.panamout.web.config.PanamoutConfig;
 
 import javax.sql.DataSource;
@@ -38,7 +39,7 @@ public class PanamoutModule extends AbstractModule{
         cpds.setAcquireIncrement(5);
         cpds.setMaxPoolSize(20);
         bind(DataSource.class).toInstance(cpds);
-
+        bind(SpotService.class);
         requestStaticInjection(Persister.class);
     }
 }

@@ -19,6 +19,9 @@ public class SpotService {
     @Inject
     private DataSource ds;
 
+    public SpotService() {
+
+    }
 
     public List<Spot> getSpot(int offset, int count) throws IOException {
         try (Connection connection = ds.getConnection()) {
