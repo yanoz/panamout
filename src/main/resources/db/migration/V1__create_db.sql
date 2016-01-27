@@ -14,7 +14,7 @@ CREATE TABLE spot (
 
 CREATE INDEX geolocation on spot USING gist(ll_to_earth(lat, lng));
 CREATE INDEX district on spot (district);
-CREATE INDEX name on spot (name);
+CREATE UNIQUE INDEX name on spot (name);
 
 CREATE TABLE metas (
     id          SERIAL PRIMARY KEY,

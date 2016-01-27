@@ -55,13 +55,36 @@ public class SpotResource {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSpots(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count) {
+    public Response getSpots(@QueryParam("offset") Integer offset, @QueryParam("count") Integer count, @QueryParam("name") String name) {
         try {
-            List<Spot> spots = spotService.getSpot(offset, count);
-            return Response.status(200).entity(new ObjectMapper().writeValueAsString(spots)).type(MediaType.TEXT_PLAIN).build();
+            if (offset!= null && count != null) {
+                List<Spot> spots = spotService.getSpot(offset, count);
+                if (null == spots || spots.isEmpty()) {
+                    return Response.status(404).build();
+                }
+                return Response.status(200).entity(new ObjectMapper().writeValueAsString(spots)).type(MediaType.APPLICATION_JSON).build();
+            }
+            if (!Strings.isNullOrEmpty(name)) {
+                Spot s = spotService.getSpotByName(name);
+                if (null == s) {
+                    return Response.status(404).build();
+                }
+                return Response.status(200).entity(new ObjectMapper().writeValueAsString(s)).type(MediaType.APPLICATION_JSON).build();
+            }
+
         } catch (IOException e) {
             LOGGER.info("Error while getting spots", e);
             return Response.status(500).entity(String.format("Error while getting spots :  %s", e.getMessage())).type(MediaType.TEXT_PLAIN).build();
         }
+        return Response.status(400).entity(String.format("Bad entry parameters. offset : %d, count : %d, name : %s", offset, count, name)).type(MediaType.TEXT_PLAIN).build();
     }
+
+
+    // Get spot by name
+
+    // Get spots by localization
+
+    // Get spots by districts
+
+    // Get spots by tag
 }

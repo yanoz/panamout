@@ -30,4 +30,12 @@ public class SpotService {
             throw new IOException("Error while getting a connection from the DB", e);
         }
     }
+
+    public Spot getSpotByName(String name) throws IOException {
+        try (Connection connection = ds.getConnection()) {
+            return new SpotDao(connection).getSpotByName(name);
+        } catch (SQLException e) {
+            throw new IOException("Error while getting a connection from the DB", e);
+        }
+    }
 }
