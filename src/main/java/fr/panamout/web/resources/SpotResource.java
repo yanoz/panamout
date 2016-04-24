@@ -65,7 +65,7 @@ public class SpotResource {
                 if (null == spots || spots.isEmpty()) {
                     return Response.status(404).build();
                 }
-                return Response.status(200).entity(buildResponse(spots)).type(MediaType.APPLICATION_JSON).build();
+                return Response.status(200).entity(new ObjectMapper().writeValueAsString(buildResponse(spots))).type(MediaType.APPLICATION_JSON).build();
             }
             if (!Strings.isNullOrEmpty(name)) {
                 Spot s = spotService.getSpotByName(name);
@@ -85,7 +85,7 @@ public class SpotResource {
 
     private  Map<String, List<Spot>>  buildResponse(List<Spot> spots) throws JsonProcessingException {
         Map<String, List<Spot>> responseMap = new HashMap();
-        responseMap.put("\"data\"", spots);
+        responseMap.put("data", spots);
         return responseMap;
     }
     private String  buildResponse(Spot spot) throws JsonProcessingException {

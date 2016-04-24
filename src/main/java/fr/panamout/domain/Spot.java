@@ -8,20 +8,7 @@ import java.util.Map;
  * Created by yann on 5/7/15.
  */
 public class Spot {
-    @Override
-    public String toString() {
-        return "Spot{" +
-                "name='" + name + '\'' +
-                ", category=" + category +
-                ", street='" + street + '\'' +
-                ", details='" + details + '\'' +
-                ", district='" + district + '\'' +
-                ", metas='" + metas + '\'' +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                ", url=" + url +
-                '}';
-    }
+
 
     @JsonProperty("name")
     public String name;
