@@ -1,5 +1,6 @@
 package fr.panamout.web.resources;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
@@ -13,7 +14,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yann on 5/7/15.
@@ -62,14 +65,14 @@ public class SpotResource {
                 if (null == spots || spots.isEmpty()) {
                     return Response.status(404).build();
                 }
-                return Response.status(200).entity(new ObjectMapper().writeValueAsString(spots)).type(MediaType.APPLICATION_JSON).build();
+                return Response.status(200).entity(buildResponse(spots)).type(MediaType.APPLICATION_JSON).build();
             }
             if (!Strings.isNullOrEmpty(name)) {
                 Spot s = spotService.getSpotByName(name);
                 if (null == s) {
                     return Response.status(404).build();
                 }
-                return Response.status(200).entity(new ObjectMapper().writeValueAsString(s)).type(MediaType.APPLICATION_JSON).build();
+                return Response.status(200).entity(buildResponse(s)).type(MediaType.APPLICATION_JSON).build();
             }
 
         } catch (IOException e) {
@@ -79,6 +82,17 @@ public class SpotResource {
         return Response.status(400).entity(String.format("Bad entry parameters. offset : %d, count : %d, name : %s", offset, count, name)).type(MediaType.TEXT_PLAIN).build();
     }
 
+
+    private  Map<String, List<Spot>>  buildResponse(List<Spot> spots) throws JsonProcessingException {
+        Map<String, List<Spot>> responseMap = new HashMap();
+        responseMap.put("\"data\"", spots);
+        return responseMap;
+    }
+    private String  buildResponse(Spot spot) throws JsonProcessingException {
+        Map<String, String> responseMap = new HashMap();
+        responseMap.put("data", new ObjectMapper().writeValueAsString(spot));
+        return new ObjectMapper().writeValueAsString(responseMap);
+    }
 
     // Get spot by name
 
